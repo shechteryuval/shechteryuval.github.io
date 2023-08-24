@@ -87,6 +87,17 @@
       }
     }
 
+    .dir-title {
+        text-align: center;
+        font-size: 2vh;
+        height: 10%;
+        margin-bottom: 5%;
+    }
+
+    .dir-bttn {
+      margin-top: 40%;
+    }
+
     .animateIn {
       animation: fadeIn 1s;
       
@@ -217,6 +228,16 @@
       gridItems.push([]);
       for (let j = 0; j < numCols; j++) {
         const gridItem = document.createElement('div');
+        
+        gridItem.addEventListener('mouseenter', (e) => { 
+          e.target.style.boxShadow = "0 0 1.5vh black";
+          e.target.style.cursor = 'pointer';
+        });
+        gridItem.addEventListener('mouseleave', (e) => {
+          e.target.style.boxShadow = "0 0 0.5vh black";
+          e.target.style.cursor = 'default';
+        });
+
         gridItem.className = 'grid-item';
 
         gridItem.style.height = `${itemHeight}vh`;
@@ -226,19 +247,24 @@
           gridItem.style.opacity = `0%`;
           gridItem.style.scale = 'scale(0)';
           if (i && !j) {
-            gridItem.innerText = pagesdata["names"][i - 1];
+            const dirTxt = document.createElement('p');
+            dirTxt.classList.add("dir-title");
+            dirTxt.classList.add("dir-bttn");
+            dirTxt.textContent = pagesdata["names"][i - 1];
+            gridItem.appendChild(dirTxt);
           } else if (i && j) {
             if (pagesdata["linknames"].length > (i-1)) {
               if (pagesdata["linknames"][i-1].length > (j-1)) {
                 const gridImg = document.createElement('img');
                 const gridTxt = document.createElement('p');
+                gridTxt.classList.add("dir-title");
                 
                 gridTxt.textContent = pagesdata["linknames"][i-1][j-1];
                 gridImg.src = pagesdata["linkthumbnails"][i-1][j-1];
 
                 gridItem.appendChild(gridTxt);
                 gridItem.appendChild(gridImg);
-                gridImg.style.width = "50%";
+                gridImg.style.width = "95%";
 
                 gridItem.addEventListener("click", (e) => {
                   window.location = pagesdata["link"][i-1];
@@ -249,7 +275,11 @@
         } else {
           gridItem.style.opacity = `80%`;
           gridItem.style.scale = 'scale(1)';
-          gridItem.innerText = "Directory";
+          const dirBttnTxt = document.createElement('p');
+          dirBttnTxt.textContent = "Directory";
+          dirBttnTxt.classList.add("dir-title");
+          dirBttnTxt.classList.add("dir-bttn");
+          gridItem.appendChild(dirBttnTxt);
         }
 
         grid.appendChild(gridItem); 
