@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Writeups</title>
+    <style>
+        .content {
+            margin-left: 20%;
+            margin-right: 20%;
+            z-index: 1;
+        }
+
+        .doc {
+            position: relative;
+            width: 100%;
+            height: 85vh;
+            display: block;
+            box-shadow: 0 0 20px black;
+            background-color: rgba(159, 151, 140, 0.8);
+            padding-top: 1%;
+            padding-bottom: 1%;
+            margin-top: 2%;
+        }
+
+        #card-title {
+            text-align: center;
+            font-size: 4vh;
+            height: 10%;
+            margin: 0%;
+        }
+
+        .card-media {
+            margin-left: 2%;
+            margin-right: 2%;
+            width: 96%;
+            height: 88%;
+        }
+
+        .triangle {
+            top: 0;
+            left: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            
+            position: absolute;
+            z-index: -1;
+        }
+
+        @keyframes move {
+            50% {
+                transform: translate(var(--dx), var(--dy));
+            }
+        }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+        <div class="doc" id="SAF_card">
+            <p id="card-title">Sinusoidal Activation Function Analysis</p>
+            <embed src="../media/sinusoidal_act.pdf" type="application/pdf" class="card-media" id="SAF"></embed>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="doc" id="CRT_card">
+            <p id="card-title">Cauchy Residue Theorem Video</p>
+            <embed src="../media/CircleTest.mp4" type="application/pdf" class="card-media" id="CRT"></embed>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="doc" id="CRT_card">
+            <p id="card-title">Cauchy Residue Theorem Video</p>
+            <embed src="../media/CircleTest.mp4" type="application/pdf" class="card-media" id="CRT"></embed>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="doc" id="CRT_card">
+            <p id="card-title">Cauchy Residue Theorem Video</p>
+            <embed src="../media/CircleTest.mp4" type="application/pdf" class="card-media" id="CRT"></embed>
+        </div>
+    </div>
+
+    <script>
+        var scrollTrack = window.scrollY;
+
+        function generateTriangle(yoffset) {
+
+            // Create triangle element
+            const triangle = document.createElement('div');
+            triangle.classList.add('triangle');
+
+            const pageFrac = 1;
+
+            const skewfrac = 1/1.6;
+            const distr_skew = (xi) => (Math.sign(xi - 0.5)*Math.pow(Math.abs(xi - 0.5), skewfrac) / (2*Math.pow(0.5, skewfrac))) + 0.5
+
+            // Random properties
+            const x = distr_skew(Math.random()) * pageFrac * 100;
+            console.log(x);
+            const y = yoffset * pageFrac * 100 + Math.random() * pageFrac * 100;
+            const x_end = distr_skew(Math.random()) * pageFrac * 100;
+            const y_end = yoffset * pageFrac * 100 + Math.random() * pageFrac * 100;
+            const dx = x_end - x;
+            const dy = y_end - y;
+            const opacity_based_rel_dist = Math.min(Math.pow(Math.pow(dx/100, 2) + Math.pow(dy/100, 2), 1.0/2.0), 0.8);
+            const rotate = Math.random() * 360 + 120;
+            const direction = Math.random() < 0.5 ? -1 : 1;
+
+            triangle.style.left = `${x}vw`;
+            triangle.style.top = `${y}vh`;
+
+            // Set position and rotation
+            triangle.style.transform = `rotate(${rotate}deg)`;
+
+            triangle.style.borderBottom = `${"100px solid #" + Math.floor(Math.random()*16777215).toString(16)}`;
+            triangle.style.opacity = `${opacity_based_rel_dist}`;
+
+            triangle.style.setProperty('--dx', dx + 'vw');
+            triangle.style.setProperty('--dy', dy + 'vh');
+
+            // Set animation for movement
+            triangle.style.animation = `move ${50*Math.random() + 30}s infinite linear`;
+
+            // Append to body
+            document.body.appendChild(triangle);
+        }
+
+            // Generate random triangles
+        for (let i = 0; i < 100; i++) {
+            generateTriangle(0);
+        }
+
+        console.log(document.body.scrollHeight/window.innerHeight);
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > scrollTrack + 50) {
+                if (2 + window.scrollY/window.innerHeight < document.body.scrollHeight/window.innerHeight) {
+                    for (let i = 0; i < 6; i++) {
+                        generateTriangle(1 + window.scrollY/window.innerHeight);
+                    }
+                }
+                scrollTrack = window.scrollY;
+            }
+        });
+    </script>
+  </body>
+</html>

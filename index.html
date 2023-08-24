@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <!-- More triangles -->
+
+  <title>My Personal Website</title>
+  <style>
+    html * {
+        font-family: 'Roboto Medium';
+    }
+
+    .content {
+        position: relative;
+        display: inline-block; 
+        margin-top: 25%;
+        margin-left: 60%;
+        z-index: 1;
+        box-shadow: 0 0 5px black;
+    }
+
+    .text-content {
+        padding: 20px;
+        background-color: #c1928a;
+        opacity: 93%;
+    }
+
+    .text-content::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;  
+    }
+
+    .triangle {
+      top: 0;
+      left: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      
+      position: absolute;
+      z-index: -1;
+    }
+
+    #container {
+      top: 2%;
+      left: 2%;
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .rectangle {
+      width: 100px;
+      height: 100px;
+      background: rgb(194, 190, 114);
+      margin: 5px;
+      z-index: 1;
+      box-shadow: 0 0 5px black;
+      text-align: center;
+    }
+
+    @keyframes move {
+      50% {
+        transform: translate(var(--dx), var(--dy));
+      }
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        scale: 0;
+      }
+      100% {
+        opacity: 0.9;
+        scale: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      100% {
+        opacity: 0;
+        scale: 0;
+      }
+    }
+
+    .animateIn {
+      animation: fadeIn 1s;
+      
+      -webkit-animation: fadeIn 1s;
+      -moz-animation: fadeIn 1s;
+      -o-animation: fadeIn 1s;
+    }
+
+    .animateOut {
+      animation: fadeOut 1s;
+      
+      -webkit-animation: fadeOut 1s;
+      -moz-animation: fadeOut 1s;
+      -o-animation: fadeOut 1s;
+    }
+
+    .grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translate(5%, 5%);
+    }
+
+    .grid-item {
+      background-color: #59a94a;
+      z-index: 1;
+      box-shadow: 0 0 0.5vh black;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="text-content">
+            <h1>Yuval Shechter (Website WIP)</h1>
+        </div>
+    </div>
+
+  <!-- More triangle divs -->
+  <script>
+    function generateTriangle() {
+
+        // Create triangle element
+        const triangle = document.createElement('div');
+        triangle.classList.add('triangle');
+
+        const pageFrac = 1;
+
+        // Random properties
+        const x = Math.random() * pageFrac * 100;
+        const y = Math.random() * pageFrac * 100;
+        const x_end = Math.random() * pageFrac * 100;
+        const y_end = Math.random() * pageFrac * 100;
+        const dx = x_end - x;
+        const dy = y_end - y;
+        const opacity_based_rel_dist = Math.min(Math.pow(Math.pow(dx/100, 2) + Math.pow(dy/100, 2), 1.0/2.0), 0.8);
+        const rotate = Math.random() * 360 + 120;
+        const direction = Math.random() < 0.5 ? -1 : 1;
+
+        triangle.style.left = `${x}vw`;
+        triangle.style.top = `${y}vh`;
+
+        // Set position and rotation
+        triangle.style.transform = `rotate(${rotate}deg)`;
+
+        triangle.style.borderBottom = `${"100px solid #" + Math.floor(Math.random()*16777215).toString(16)}`;
+        triangle.style.opacity = `${opacity_based_rel_dist}`;
+
+        triangle.style.setProperty('--dx', dx + 'vw');
+        triangle.style.setProperty('--dy', dy + 'vh');
+
+        // Set animation for movement
+        triangle.style.animation = `move ${50*Math.random() + 30}s infinite linear`;
+
+        // Append to body
+        document.body.appendChild(triangle);
+    }
+
+    // Generate random triangles
+    for (let i = 0; i < 50; i++) {
+        generateTriangle();
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    document.body.appendChild(grid);
+
+    const screenwidth = window.innerWidth;
+    const screenheight = window.innerHeight;
+    const ratio = screenheight/screenwidth;
+
+    pagesdata = {
+        "names": [
+            "Writeups",
+            "Creative",
+            "Ideas"
+        ],
+        "linknames": [
+            ["Periodic Activation Functions", "Cauchy Residue Theorem"]
+        ],
+        "linkthumbnails": [
+          ["https://d2vlcm61l7u1fs.cloudfront.net/media/efa/efa56b9c-b4c8-43ea-b501-d022caeef847/phps684tp.png", "https://ekamperi.github.io/images/cauchy_complex_1.png"],
+        ],
+        "links": [
+            ["./writeups.html/#PAF_card", "./writeups.html/#CRT_card"]
+        ]
+    }
+
+    const numRows = pagesdata["names"].length + 1;
+    const numCols = pagesdata["linknames"].reduce((acc, e) => Math.max(acc, e.length), 0) + 1;
+    const itemHeight = Math.floor(95 / (1.5*(numRows-1) + 1));
+    const itemWidth =  ratio*Math.floor(95 / (1.5*(numCols-1) + 1));
+    
+    grid.style.rowGap = `${0.5 * itemHeight}vh`;
+    grid.style.columnGap = `${0.5 * itemWidth}vw`;
+
+    const gridItems = [];
+    for (let i = 0; i < numRows; i++) {
+      gridItems.push([]);
+      for (let j = 0; j < numCols; j++) {
+        const gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
+
+        gridItem.style.height = `${itemHeight}vh`;
+        gridItem.style.width = `${itemWidth}vw`;
+
+        if (i || j) {
+          gridItem.style.opacity = `0%`;
+          gridItem.style.scale = 'scale(0)';
+          if (i && !j) {
+            gridItem.innerText = pagesdata["names"][i - 1];
+          } else if (i && j) {
+            if (pagesdata["linknames"].length > (i-1)) {
+              if (pagesdata["linknames"][i-1].length > (j-1)) {
+                const gridImg = document.createElement('img');
+                const gridTxt = document.createElement('p');
+                
+                gridTxt.textContent = pagesdata["linknames"][i-1][j-1];
+                gridImg.src = pagesdata["linkthumbnails"][i-1][j-1];
+
+                gridItem.appendChild(gridTxt);
+                gridItem.appendChild(gridImg);
+                gridImg.style.width = "50%";
+
+                gridItem.addEventListener("click", (e) => {
+                  window.location = pagesdata["links"][i-1][j-1];
+                });
+              }
+            }
+          }
+        } else {
+          gridItem.style.opacity = `80%`;
+          gridItem.style.scale = 'scale(1)';
+          gridItem.innerText = "Directory";
+        }
+
+        grid.appendChild(gridItem); 
+        gridItems[i].push(gridItem);
+      }
+    }
+
+    gridItems.forEach((gridRow, i) => {
+      gridRow.forEach((gridItem, j) => {
+        if (i && !j) {
+          const row = gridItems[i].slice(1);
+          gridItem.addEventListener("click", (e) => {
+            if (row.reduce((acc, elem) => acc && (elem.style.opacity == '0'), true)) {
+              rowTransition(row, "show");
+            } else {
+              rowTransition(row, "hide");
+            }
+          });
+        }
+      })
+    });
+
+    gridItems[0][0].addEventListener("click", (e) => {
+      if (gridItems.slice(1).reduce((acc, elem) => acc && (elem[0].style.opacity == '0'), true)) {
+        directoryTransition(gridItems, "show");
+      } else {
+        directoryTransition(gridItems, "hide");
+      }
+    });
+
+    // Grid styles
+    grid.style.display = 'grid';
+    grid.style.gridTemplate = `repeat(${numRows}, ${itemHeight}vh) / repeat(${numCols}, ${itemWidth}vw)`;
+
+    function directoryTransition(pageGrid, opacityTransition) {
+      if (opacityTransition == "show") {
+        pageGrid.forEach((pages, i) => 
+          pages.forEach((page, j) => {
+            if (i && !j) {
+              page.style.transition = `opacity 500ms ease-in-out, transform ${500 + 300*i + 200*j}ms`;
+              page.style.opacity = `80%`;
+              page.style.transform = 'scale(1)';
+            }
+        }));
+      } else {
+        pageGrid.forEach((pages, i) => 
+          pages.forEach((page, j) => {
+            if (i || j) {
+              page.style.transition = `opacity 500ms ease-in-out, transform ${500 + 300*i + 200*j}ms`;
+              page.style.opacity = `0%`;
+              page.style.transform = 'scale(0)';
+            }
+        }));
+      }
+    }
+
+    function rowTransition(row, opacityTransition) {
+      if (opacityTransition == "show") {
+        row.forEach((page, j) => {
+          page.style.transition = `opacity 500ms ease-in-out, transform ${500 + 200*j}ms`;
+          page.style.opacity = `80%`;
+          page.style.transform = 'scale(1)';
+        });
+      } else {
+        row.forEach((page, j) => {
+          page.style.transition = `opacity 500ms ease-in-out, transform ${500 + 200*j}ms`;
+          page.style.opacity = `0%`;
+          page.style.transform = 'scale(0)';
+        });
+      }
+    }
+  </script>
+</body>
+</html>
