@@ -89,13 +89,14 @@
 
     .dir-title {
         text-align: center;
-        font-size: 2vh;
+        font-size: 1.5vh;
         height: 10%;
-        margin-bottom: 5%;
+        margin-bottom: 20%;
     }
 
     .dir-bttn {
-      margin-top: 40%;
+      margin-top: 50%;
+      font-size: 2vh;
     }
 
     .animateIn {
@@ -200,6 +201,7 @@
           [
             "Periodic Activation Functions",
             "Recommender System Diversity",
+            "Catastrophic Forgetting Mitigation",
             "Cauchy Residue Theorem"
           ],
         ],
@@ -207,6 +209,7 @@
           [
             "https://d2vlcm61l7u1fs.cloudfront.net/media/efa/efa56b9c-b4c8-43ea-b501-d022caeef847/phps684tp.png", 
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flive.staticflickr.com%2F7884%2F45532583305_bedaed6296.jpg&f=1&nofb=1&ipt=d567b5540eb3e350dd026fc90de01a87aa6eed87252547e298729cb6b7075ccd&ipo=images", 
+            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.phase-6.com%2Fsystem%2Fgalleries%2Fpics%2FVokabeltrainer%2Fforgetting_curve_en.png&f=1&nofb=1&ipt=f53e8d77e1c7d8a45a1379c7d84167c166834e1a829ccd18b9f40d6ddb8b6977&ipo=images",
             "https://ekamperi.github.io/images/cauchy_complex_1.png"
           ],
         ],
@@ -217,8 +220,8 @@
 
     const numRows = pagesdata["names"].length + 1;
     const numCols = pagesdata["linknames"].reduce((acc, e) => Math.max(acc, e.length), 0) + 1;
-    const itemHeight = Math.floor(95 / (1.5*(numRows-1) + 1));
     const itemWidth =  ratio*Math.floor(95 / (1.5*(numCols-1) + 1));
+    const itemHeight = Math.min((1.5/ratio)*itemWidth, Math.floor(95 / (1.5*(numRows-1) + 1)));
     
     grid.style.rowGap = `${0.5 * itemHeight}vh`;
     grid.style.columnGap = `${0.5 * itemWidth}vw`;
@@ -248,8 +251,8 @@
           gridItem.style.scale = 'scale(0)';
           if (i && !j) {
             const dirTxt = document.createElement('p');
-            dirTxt.classList.add("dir-title");
             dirTxt.classList.add("dir-bttn");
+            dirTxt.classList.add("dir-title");
             dirTxt.textContent = pagesdata["names"][i - 1];
             gridItem.appendChild(dirTxt);
           } else if (i && j) {
