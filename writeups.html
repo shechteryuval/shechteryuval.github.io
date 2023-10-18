@@ -54,6 +54,13 @@
   </head>
   <body>
     <div class="content">
+        <div class="doc" id="FDM_card">
+            <p id="card-title">Multipoint Finite Difference Generator</p>
+            <embed src="../media/finite_difference_method.pdf" type="application/pdf" class="card-media" id="FDM"></embed>
+        </div>
+    </div>
+
+    <div class="content">
         <div class="doc" id="SAF_card">
             <p id="card-title">Sinusoidal Activation Function Analysis</p>
             <embed src="../media/sinusoidal_act.pdf" type="application/pdf" class="card-media" id="SAF"></embed>
@@ -137,9 +144,9 @@
         console.log(document.body.scrollHeight/window.innerHeight);
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY > scrollTrack + 50) {
+            if (window.scrollY > scrollTrack + 25) {
                 if (2 + window.scrollY/window.innerHeight < document.body.scrollHeight/window.innerHeight) {
-                    for (let i = 0; i < 4; i++) {
+                    for (let i = 0; i < 2; i++) {
                         generateTriangle(1 + window.scrollY/window.innerHeight);
                     }
                 }
