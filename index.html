@@ -11,18 +11,32 @@
     }
 
     .content {
-        position: relative;
-        display: inline-block; 
-        margin-top: 25%;
-        margin-left: 60%;
         z-index: 1;
-        box-shadow: 0 0 5px black;
-    }
-
-    .text-content {
-        padding: 20px;
+        width: 20vw;
+        height: 16vh;
+        float: right;
+        border-radius: 3%;
+        box-shadow: 0 0 0.2vw rgb(174, 82, 75);
         background-color: #c1928a;
         opacity: 93%;
+    }
+
+    .contact {
+      display: flex;
+    }
+
+    .contact-item {
+      width: 25%;
+      margin-left: 5%;
+      margin-right: 5%;
+      box-shadow: 0 0 0.3vw black;
+      border-radius: 10%;
+      background-color: rgba(96, 75, 174, 0.568);
+    }
+    
+    .name-text {
+      text-align: center;
+      font-size: 1.2vw;
     }
 
     .text-content::before {
@@ -89,14 +103,16 @@
 
     .dir-title {
         text-align: center;
-        font-size: 1.5vh;
-        height: 10%;
+        height: 30%;
+        width: 95%;
+        margin-top: 5%;
+        margin-left: 5%;
+        margin-right: 5%;
         margin-bottom: 20%;
     }
 
     .dir-bttn {
-      margin-top: 50%;
-      font-size: 2vh;
+      margin-top: 30%;
     }
 
     .animateIn {
@@ -116,10 +132,11 @@
     }
 
     .grid {
+      display: flex;
       position: absolute;
       top: 0;
       left: 0;
-      transform: translate(5%, 5%);
+      transform: translate(4vw, 8vh);
     }
 
     .grid-item {
@@ -133,8 +150,11 @@
 
 <body>
     <div class="content">
-        <div class="text-content">
-            <h1>Yuval Shechter (Website WIP)</h1>
+      <h1 class="name-text">Yuval Shechter (Website WIP)</h1>
+        <div class="contact">
+          <img data-linkto="https://www.linkedin.com/in/yuval-shechter" class="contact-item" src="../images/linkedinlogo.png">
+          <img data-linkto="https://github.com/shechteryuval/shechteryuval.github.io" class="contact-item" src="../images/githublogo.png">
+          <img data-linkto="mailto:tmz0h32te@mozmail.com" class="contact-item" src="../images/outlooklogo.png">
         </div>
     </div>
 
@@ -222,11 +242,29 @@
 
     const numRows = pagesdata["names"].length + 1;
     const numCols = pagesdata["linknames"].reduce((acc, e) => Math.max(acc, e.length), 0) + 1;
-    const itemWidth =  ratio*Math.floor(95 / (1.5*(numCols-1) + 1));
-    const itemHeight = Math.min((1.5/ratio)*itemWidth, Math.floor(95 / (1.5*(numRows-1) + 1)));
+    const itemWidth =  ratio*Math.floor(92 / ((numCols-1) + 1));
+    const itemHeight = Math.min((1/ratio)*itemWidth, Math.floor(92 / ((numRows-1) + 1)));
     
-    grid.style.rowGap = `${0.5 * itemHeight}vh`;
+    grid.style.rowGap = `${Math.max(0.2 * (92 - (numRows-1)*itemHeight), 1)}vh`;
     grid.style.columnGap = `${0.5 * itemWidth}vw`;
+
+    console.log(document.getElementsByClassName("contact-item"))
+
+    Array.from(document.getElementsByClassName("contact-item")).forEach((item) => {
+      item.addEventListener('mouseenter', (e) => {
+        e.target.style.boxShadow = "0 0 1vh black";
+        e.target.style.cursor = 'pointer';
+      });
+
+      item.addEventListener('mouseleave', (e) => {
+        e.target.style.boxShadow = "0 0 0.5vh black";
+        e.target.style.cursor = 'pointer';
+      });
+
+      item.addEventListener('click', (e) => {
+        window.open(item.getAttribute("data-linkto"), "_blank");
+      });
+    });
 
     const gridItems = [];
     for (let i = 0; i < numRows; i++) {
@@ -252,16 +290,18 @@
           gridItem.style.opacity = `0%`;
           gridItem.style.scale = 'scale(0)';
           if (i && !j) {
-            const dirTxt = document.createElement('p');
+            const dirTxt = document.createElement('div');
             dirTxt.classList.add("dir-bttn");
             dirTxt.classList.add("dir-title");
+            dirTxt.style.fontSize = `${Math.min(itemWidth, itemHeight)/5}${itemWidth < itemHeight ? "vw" : "vh"}`;
             dirTxt.textContent = pagesdata["names"][i - 1];
             gridItem.appendChild(dirTxt);
           } else if (i && j) {
             if (pagesdata["linknames"].length > (i-1)) {
               if (pagesdata["linknames"][i-1].length > (j-1)) {
                 const gridImg = document.createElement('img');
-                const gridTxt = document.createElement('p');
+                const gridTxt = document.createElement('div');
+                gridTxt.style.fontSize = `${Math.min(itemWidth, itemHeight)/8}${itemWidth < itemHeight ? "vw" : "vh"}`;
                 gridTxt.classList.add("dir-title");
                 
                 gridTxt.textContent = pagesdata["linknames"][i-1][j-1];
@@ -269,7 +309,8 @@
 
                 gridItem.appendChild(gridTxt);
                 gridItem.appendChild(gridImg);
-                gridImg.style.width = "95%";
+                gridImg.style.height = "40%";
+                gridImg.style.width = "90%";
 
                 gridItem.addEventListener("click", (e) => {
                   window.location = pagesdata["link"][i-1];
@@ -280,10 +321,11 @@
         } else {
           gridItem.style.opacity = `80%`;
           gridItem.style.scale = 'scale(1)';
-          const dirBttnTxt = document.createElement('p');
+          const dirBttnTxt = document.createElement('div');
           dirBttnTxt.textContent = "Directory";
           dirBttnTxt.classList.add("dir-title");
           dirBttnTxt.classList.add("dir-bttn");
+          dirBttnTxt.style.fontSize = `${Math.min(itemWidth, itemHeight)/5}${itemWidth < itemHeight ? "vw" : "vh"}`;
           gridItem.appendChild(dirBttnTxt);
         }
 
